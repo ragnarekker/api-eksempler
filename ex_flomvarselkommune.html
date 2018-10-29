@@ -1,0 +1,44 @@
+<html>
+<!--
+  Eksempel laget av Ingvar Ljosland (Bouvet) og tilpasset av
+  Ragnar Ekker (NVE) for bruk på Tekonologidagene 2018.
+-->
+
+<style>
+    #resultFull {
+        font-size: 10px;
+        border: 1px solid black;
+        padding: 20px;
+        word-wrap: break-word;
+    }
+</style>
+
+<body>
+    <div id="resultMunicipalityList"></div>
+    <div id="resultFull"></div>
+</body>
+
+<script>
+    const county = "5001"; //Trondheim
+    const language = 1;
+    const url = `https://api01.nve.no/hydrology/forecast/flood/v1.0.6/api/Warning/Municipality/${county}/${language}`;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url);
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            let table = '<table cellpadding="5"><th><tr><td><strong>Kommune</strong></td><td><strong>Varsel</strong></td><td><strong>Gyldig til</strong></td></th>'
+            for (const item of data) {
+                table += `<tr><td>${item.MunicipalityList[0].Name}</td><td>${item.ActivityLevel}</td><td><i>${item.ValidTo}</i></td></tr>`
+            }
+            table += '</table>';
+            document.getElementById('resultMunicipalityList').innerHTML = table;
+            document.getElementById('resultFull').innerText = xhr.responseText;
+        } else {
+            alert('Klarte ikke hente data fra apiet');
+        }
+    };
+    xhr.send();
+</script>
+</html>
