@@ -30,7 +30,7 @@
             const data = JSON.parse(xhr.responseText);
             let table = '<table cellpadding="5"><th><tr><td><strong>RegID</strong></td><td><strong>Date</strong></td><td><strong>NickName</strong></td><td><strong>Forms</strong></td></th>'
             for (const item of data) {
-                table += `<tr><td>${item.RegId}</td><td>${item.DtObsTime}</td><td>${item.Observer.NickName}</td><td>`
+                table += `<tr><td>${item.RegID}</td><td>${item.DtObsTime}</td><td>${item.Observer.NickName}</td><td>`
                 for (const regs of item.Summaries) {
                     table += `${regs.RegistrationName}, `
                 }
