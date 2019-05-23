@@ -1,0 +1,49 @@
+<html>
+<!--
+  Example by Ragnar Ekker (NVE).
+-->
+
+<style>
+    #resultFull {
+        font-size: 10px;
+        border: 1px solid black;
+        padding: 20px;
+        word-wrap: break-word;
+    }
+</style>
+
+<body>
+    <div id="resultTable"></div>
+    <div id="resultFull"></div>
+</body>
+
+<script>
+    const url = `https://api.regobs.no/v4/Search`;
+    const searchParams = {
+        LangKey: 2,
+        NumberOfRecords: 10,
+    };
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            let table = '<table cellpadding="5"><th><tr><td><strong>RegID</strong></td><td><strong>Date</strong></td><td><strong>NickName</strong></td><td><strong>Forms</strong></td></th>'
+            for (const item of data) {
+                table += `<tr><td>${item.RegId}</td><td>${item.DtObsTime}</td><td>${item.Observer.NickName}</td><td>`
+                for (const regs of item.Summaries) {
+                    table += `${regs.RegistrationName}, `
+                }
+                table += '</td></tr>'
+            }
+            table += '</table>';
+            document.getElementById('resultTable').innerHTML = table;
+            document.getElementById('resultFull').innerText = xhr.responseText;
+        } else {
+            alert('Could not get data from the API');
+        }
+    };
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(JSON.stringify(searchParams));
+</script>
+</html>
